@@ -1,0 +1,94 @@
+---
+import Search from "../icons/Search.astro";
+import Cart from "../icons/Cart.astro";
+---
+
+<header class="">
+  <nav
+    class="flex flex-col items-center justify-center
+    md:flex-row md:justify-evenly md:gap-16 md:px-16 md:py-7
+  bg-[#232F3E] text-white">
+    <a href="../">
+      <img src="../FerreMaxicon.png" alt="" class="md:w-96"/>
+      </a>
+    <div class="flex items-center">
+      <!-- Buscador -->
+      <form class="w-[600px]">
+        <div class="md:relative flex justify-center">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <Search />
+          </div>
+          <input
+            type="search"
+            id="default-search"
+            class="block md:w-full p-4 ps-10 border text-black border-gray-300 rounded-lg focus:ring-2 bg-gray-50 focus:ring-orange-400 focus:border-orange-400 focus:outline-none"
+            placeholder="Buscador"
+            required
+          />
+          <button
+            type="submit"
+            class="text-white absolute end-2.5 bottom-2.5 bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2"
+            >Buscar</button
+          >
+        </div>
+      </form>
+    </div>
+    <!-- Cuenta -->
+    <div id="account">
+      <a href="../login">Iniciar sesion</a>
+      /
+      <a href="../registro">Registrarse</a>
+    </div>
+    <!-- Carrito -->
+    <a href="../carro">
+      <div class="relative py-2">
+        <div class="t-0 absolute left-3">
+          <p
+            class="flex size-4 items-center justify-center rounded-full bg-orange-500 p-3 text-md text-white">
+            3
+          </p>
+        </div>
+        <Cart />
+      </div>
+    </a>
+  </nav>
+  <!-- Menu -->
+  <nav class="flex flex-row justify-center items-center">
+    <ul class="flex flex-row justify-center items-center px-16 py-7 gap-32">
+      <li>
+        <a href="../" class="text-lg font-semibold hover:text-orange-500"
+          >Inicio</a
+        >
+      </li>
+      <li>
+        <a
+          href="../productos"
+          class="text-lg font-semibold hover:text-orange-500">Productos</a
+        >
+      </li>
+      <li>
+        <a href="../sobrenosotros" class="text-lg font-semibold hover:text-orange-500"
+          >Sobre nosotros</a
+        >
+      </li>
+      <li>
+        <a
+          href="../contacto"
+          class="text-lg font-semibold hover:text-orange-500">Contacto</a
+        >
+      </li>
+    </ul>
+    <!-- Divisas -->
+    <div class="absolute right-16">
+      <select
+        name="currency"
+        id="currency"
+        class="text-sm border text-black border-gray-300 rounded-lg focus:ring-2 bg-gray-50 focus:ring-orange-400 focus:border-orange-400 focus:outline-none">
+        <option value="clp">CLP</option>
+        <option value="usd">USD</option>
+      </select>
+    </div>
+  </nav>
+  <hr class="border-t-2 border-gray-300"/>
+</header>

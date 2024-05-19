@@ -1,0 +1,25 @@
+---
+import { db, Productos } from "astro:db";
+import Card from "./Card.astro";
+
+const productos = await db.select().from(Productos);
+
+console.log(productos);
+---
+
+<h2>Productos</h2>
+<section class="h-screen">
+  <div class="w-full flex flex-row justify-center items-center gap-6 pt-32">
+    {
+      productos.map((productos) => (
+        <Card
+          id={productos.id}
+          name={productos.name}
+          brand={productos.brand}
+          image={productos.image}
+          price={productos.price}
+        />
+      ))
+    }
+  </div>
+</section>
