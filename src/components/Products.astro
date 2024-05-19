@@ -4,12 +4,11 @@ import Card from "./Card.astro";
 
 const productos = await db.select().from(Productos);
 
-console.log(productos);
+// console.log(productos);
 ---
 
-<h2>Productos</h2>
 <section class="h-screen">
-  <div class="w-full flex flex-row justify-center items-center gap-6 pt-32">
+  <div class="grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 md:px-5 pt-16 2xl:px-20">
     {
       productos.map((productos) => (
         <Card
