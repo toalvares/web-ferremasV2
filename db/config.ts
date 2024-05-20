@@ -6,6 +6,10 @@ const Productos = defineTable({
     name: column.text(),
     price: column.number(),
     brand: column.text(),
+    description: column.text(),
+    model: column.text(),
+    amperaje: column.text(),
+    warranty: column.text(),
     image: column.text(),
   },
 });
