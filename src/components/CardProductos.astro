@@ -14,7 +14,6 @@ const { id, name, brand, price, image } = Astro.props;
 <div
   class="w-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-xl hover:border-gray-400 hover:transition-all hover:translate-y-1 duration-150 ease-in-out">
   <a href=`../detalle/${id}`>
-    <p>{id}</p>
     <img
       class="p-2 rounded-t-lg w-full h-80 object-cover object-center"
       src={image}
@@ -92,7 +91,7 @@ const { id, name, brand, price, image } = Astro.props;
     <!-- Precio -->
     <div class="flex items-center justify-between">
       <span class="text-xl font-bold text-gray-900 dark:text-white"
-        >{price}</span
+        >${price} </span
       >
       <a
         href="../carro"

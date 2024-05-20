@@ -6,7 +6,6 @@ import { db, Productos } from "astro:db";
 const idurl = Astro.url.href.split("/")[4];
 const productos = await db.select().from(Productos);
 const producto = productos.find((producto) => producto.id === Number(idurl));
-
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -14,11 +13,15 @@ const producto = productos.find((producto) => producto.id === Number(idurl));
     <Header />
 
     <div
-      class="w-screen grid grid-cols-2 gap-96 xl:gap-52 2xl:gap-44 mx-auto h-screen">
-      <div class="xl:ml-56 md:ml-40 ml-14 pt-24">
+      class="w-screen md:grid md:grid-cols-2 flex flex-col md:gap-96 xl:gap-32 2xl:gap-40 mx-auto h-screen">
+      <div class="xl:ml-56 md:ml-32 ml-14 pt-24">
         <div
           class="min-w-[480px] 2xl:w-[620px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
-          <img src=`${producto?.image}` class="object-contain" alt="Imagen de tnato" />
+          <img
+            src=`${producto?.image}`
+            class="object-contain"
+            alt="Imagen de tnato"
+          />
         </div>
       </div>
 
@@ -37,9 +40,11 @@ const producto = productos.find((producto) => producto.id === Number(idurl));
           <p class="text-lg font-normal">Amperaje: {producto?.amperaje}</p>
           <p class="text-lg font-normal">Garantía: {producto?.warranty}</p>
         </div>
-        <p class="text-lg font-medium">Precio: $39.990 IVA incluido</p>
+        <p class="text-lg font-medium">
+          Precio: ${producto?.price} + IVA incluido
+        </p>
         <button
-          class="bg-orange-300 text-white font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-400 hover:transition-all hover:-translate-y-1 duration-150 ease-in-out"
+          class="bg-orange-500 text-white font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
           >Comprar</button
         >
       </div>

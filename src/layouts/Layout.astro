@@ -26,6 +26,10 @@ const { title } = Astro.props;
     /* Resetear estilos globales */
     margin: 0%;
     padding: 0%;
-    
+    width: 100vw;
+    @media screen and (max-width: 768px) {
+      width: 100vh;
+      
+    }
   }
 </style>
