@@ -1,0 +1,48 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import { db, Productos } from "astro:db";
+
+const idurl = Astro.url.href.split("/")[4];
+const productos = await db.select().from(Productos);
+const producto = productos.find((producto) => producto.id === Number(idurl));
+
+---
+
+<Layout title="FerremaX | Las mejores herramientas del mercado">
+  <main>
+    <Header />
+
+    <div
+      class="w-screen grid grid-cols-2 gap-96 xl:gap-52 2xl:gap-44 mx-auto h-screen">
+      <div class="xl:ml-56 md:ml-40 ml-14 pt-24">
+        <div
+          class="min-w-[480px] 2xl:w-[620px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
+          <img src=`${producto?.image}` class="object-contain" alt="Imagen de tnato" />
+        </div>
+      </div>
+
+      <div class="flex flex-col w-3/4 md:w-3/5 pt-24 text-pretty gap-y-3">
+        <div>
+          <h2 class="text-3xl font-semibold">
+            {producto?.name}
+          </h2>
+          <p class="text-sm font-medium">Marca: {producto?.brand}</p>
+        </div>
+        <div class="flex flex-col gap-y-2">
+          <p class="text-lg font-normal text-pretty">
+            {producto?.description || "Descripción del producto"}
+          </p>
+          <p class="text-lg font-normal">Modelo: {producto?.model}</p>
+          <p class="text-lg font-normal">Amperaje: {producto?.amperaje}</p>
+          <p class="text-lg font-normal">Garantía: {producto?.warranty}</p>
+        </div>
+        <p class="text-lg font-medium">Precio: $39.990 IVA incluido</p>
+        <button
+          class="bg-orange-300 text-white font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-400 hover:transition-all hover:-translate-y-1 duration-150 ease-in-out"
+          >Comprar</button
+        >
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -3,12 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Cartempty from "../icons/Cartempty.astro";
 
-export interface PagoCarro {
-  total: string;
-}
-const { total }: PagoCarro = {
-  total: "30000",
-};
+
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -87,7 +82,7 @@ const { total }: PagoCarro = {
         <div
           class="flex items center justify-between w-full border-b border-gray-200 py-2">
           <p class="text-lg text-gray-800 font-bold">Total</p>
-          <p class="text-lg text-gray-800 font-bold">${total}</p>
+          <p class="text-lg text-gray-800 font-bold">$3000</p>
         </div>
 
         <div
