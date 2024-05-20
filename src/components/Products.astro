@@ -1,17 +1,16 @@
 ---
 import { db, Productos } from "astro:db";
-import Card from "./Card.astro";
+import CardProductos from "./CardProductos.astro";
 
 const productos = await db.select().from(Productos);
 
-// console.log(productos);
 ---
 
 <section class="h-screen">
   <div class="grid gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 md:px-5 pt-16 2xl:px-20">
     {
       productos.map((productos) => (
-        <Card
+        <CardProductos	
           id={productos.id}
           name={productos.name}
           brand={productos.brand}
