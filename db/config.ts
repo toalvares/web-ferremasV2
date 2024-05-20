@@ -4,7 +4,7 @@ const Productos = defineTable({
   columns: {
     id: column.number({ primaryKey: true }),
     name: column.text(),
-    price: column.number(),
+    price: column.text(),
     brand: column.text(),
     description: column.text(),
     model: column.text(),
