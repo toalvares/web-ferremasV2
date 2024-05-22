@@ -58,6 +58,13 @@ export default async function seed() {
       image: "/productos/cepilladora.jpg",
     },
   ]);
+
+  await db.insert(Usuarios).values([
+    {
+      id: 1,
+      name: "admin",
+      email: "tomasalvares0237@gmail.com",
+      password: "admin",
+    },
+  ]);
 }
-
-
