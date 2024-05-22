@@ -1,4 +1,4 @@
-import { Productos, db } from "astro:db";
+import { Productos, Usuarios, db } from "astro:db";
 
 export default async function seed() {
   await db.insert(Productos).values([
@@ -59,3 +59,5 @@ export default async function seed() {
     },
   ]);
 }
+
+

@@ -1,4 +1,4 @@
-import { defineDb, defineTable, column } from "astro:db";
+import { defineDb, defineTable, column} from "astro:db";
 
 const Productos = defineTable({
   columns: {
@@ -14,6 +14,16 @@ const Productos = defineTable({
   },
 });
 
+const Usuarios = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true }),
+    name: column.text(),
+    email: column.text(),
+    password: column.text(),
+  },
+});
+
+
 export default defineDb({
-  tables: { Productos },
+  tables: { Productos, Usuarios },
 });
