@@ -6,6 +6,8 @@ import { db, Productos } from "astro:db";
 const idurl = Astro.url.href.split("/")[4];
 const productos = await db.select().from(Productos);
 const producto = productos.find((producto) => producto.id === Number(idurl));
+
+
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -20,7 +22,7 @@ const producto = productos.find((producto) => producto.id === Number(idurl));
           <img
             src=`${producto?.image}`
             class="object-contain"
-            alt="Imagen de tnato"
+            alt="Imagen de tato"
           />
         </div>
       </div>
@@ -43,9 +45,9 @@ const producto = productos.find((producto) => producto.id === Number(idurl));
         <p class="text-lg font-medium">
           Precio: ${producto?.price} + IVA incluido
         </p>
-        <button
-          class="bg-orange-500 text-white font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
-          >Comprar</button
+        <a href=`../carro/${producto?.id}`
+          class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
+          >Comprar</a
         >
       </div>
     </div>

@@ -1,6 +1,6 @@
 ---
-import { db, Productos } from "astro:db";
 import CardProductos from "./CardProductos.astro";
+import { db, Productos } from "astro:db";
 
 const productos = await db.select().from(Productos);
 
