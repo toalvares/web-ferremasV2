@@ -1,0 +1,102 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Cartempty from "../../icons/Cartempty.astro";
+import { db, Productos } from "astro:db";
+
+const idurl = Astro.url.href.split("/")[4];
+const productos = await db.select().from(Productos);
+const producto = productos.find((producto) => producto.id === Number(idurl));
+
+
+---
+
+<Layout title="FerremaX | Las mejores herramientas del mercado">
+  <main>
+    <Header />
+
+    <!-- Vista del carro de productos -->
+    <section class="container mx-auto py-12">
+      <h1 class="text-4xl text-center font-bold text-gray-800">
+        Carrito de compras
+      </h1>
+
+      <!-- Si el carro está vacío -->
+      <!-- <div class="flex flex-col items-center mt-6" hidden>
+        <Cartempty />
+        <p class="text-xl text-gray-800 mt-4">Tu carro de compras está vacío</p>
+        <a href="../productos" class="text-orange-500 underline mt-2">Ir a productos</a>
+      </div> -->
+
+      <!-- Si el carro no está vacío -->
+      <div class="flex flex-col items-center mt-6" hidden>
+        <div
+          class="flex items-center justify-between w-full border-b border-gray-200 py-2">
+          <p class="text-xl text-gray-800">Producto</p>
+          <p class="text-xl text-gray-800">Precio</p>
+          <p class="text-xl text-gray-800">Cantidad</p>
+          <p class="text-xl text-gray-800">Total</p>
+        </div>
+
+        <div
+          class="flex items-center justify-between w-full border-b border-gray-200 py-2">
+          <div class="flex items-center">
+            <img
+              src={producto?.image}
+              class="w-16 h-16 object-cover rounded-lg"
+              alt="Producto 1"
+            />
+            <p class="text-lg text-gray-800 ml-4">{producto?.name.slice(0,9)}</p>
+          </div>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+          <p class="text-lg text-gray-800">1</p>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+        </div>
+
+        <!-- <div
+          class="flex items-center justify-between w-full border-b border-gray-200 py-2">
+          <div class="flex items-center">
+            <img
+              src={producto?.image}
+              class="w-16 h-16 object-cover rounded-lg"
+              alt="Producto 1"
+            />
+            <p class="text-lg text-gray-800 ml-4">{producto?.name.slice(0,9)}</p>
+          </div>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+          <p class="text-lg text-gray-800">1</p>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+        </div>
+
+        <div
+          class="flex items-center justify-between w-full border-b border-gray-200 py-2">
+          <div class="flex items-center">
+            <img
+              src={producto?.image}
+              class="w-16 h-16 object-cover rounded-lg"
+              alt="Producto 1"
+            />
+            <p class="text-lg text-gray-800 ml-4">{producto?.name.slice(0,9)}</p>
+          </div>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+          <p class="text-lg text-gray-800">1</p>
+          <p class="text-lg text-gray-800">${producto?.price}</p>
+        </div> -->
+
+        <div
+          class="flex items center justify-between w-full border-b border-gray-200 py-2">
+          <p class="text-lg text-gray-800 font-bold">Total</p>
+          <p class="text-lg text-gray-800 font-bold">${producto?.price}</p>
+        </div>
+
+        <div
+          class="flex items-center justify-between w-full mt-6">
+          <a href="/productos" class="text-orange-500 underline"
+            >Seguir comprando</a>
+          <a href={"/pago/"} class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg">Pagar</a>
+
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

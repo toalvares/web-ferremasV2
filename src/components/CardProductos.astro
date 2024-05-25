@@ -94,7 +94,7 @@ const { id, name, brand, price, image } = Astro.props;
         >${price} </span
       >
       <a
-        href="../carro"
+        href=`../carro/${id}`
         class="text-white font-semibold bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 rounded-lg text-sm px-3 py-2.5 text-center transition-colors duration-200 ease-in-out"
         >Añadir al carro</a
       >
