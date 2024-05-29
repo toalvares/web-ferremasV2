@@ -1,6 +1,7 @@
 ---
 import Search from "../icons/Search.astro";
 import Cart from "../icons/Cart.astro";
+import CartFlyoutToggle from "./CartFlyoutToggle";
 
 const DateFormat = "YYYY-MM-DD"
 
@@ -12,6 +13,8 @@ const apiBanco = await fetch(`https://si3.bcentral.cl/SieteRestWS/SieteRestWS.as
 const data = await apiBanco.json()
 
 // console.log(data)
+
+let id = 1
 
 
 ---
@@ -54,7 +57,7 @@ const data = await apiBanco.json()
       <a href="../registro">Registrarse</a>
     </div>
     <!-- Carrito -->
-    <a href="../carro">
+    <a href=`../carro/${id}`>
       <div class="relative py-2">
         <div class="t-0 absolute left-3">
           <p

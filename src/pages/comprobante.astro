@@ -30,7 +30,7 @@ const response = await res.json();
 
 console.log(response);
 
-const { buy_order, session_id, card_detail, accounting_date, transaction_date, details, status} = response;
+const { buy_order, am, card_detail, accounting_date, transaction_date, details, status, amount} = response;
 
 const estado_compra  = status === "AUTHORIZED" ? "Transacción autorizada" : "Transacción rechazada";
 ---
@@ -41,6 +41,7 @@ const estado_compra  = status === "AUTHORIZED" ? "Transacción autorizada" : "Tr
     <div class="flex flex-col justify-center items-center">
       <h1 class="flex justify-center items-center text-3xl font-bold pt-40">Este es el comprobate de tu compra</h1>
       <p>{buy_order}</p>
+      <p>{amount}</p>
       <p class:list={[
         "text-2xl font-bold",
         {

@@ -9,6 +9,12 @@ export interface DatosProducto {
 
 const { id, name, brand, price, image } = Astro.props;
 
+const formatter = new Intl.NumberFormat('es-CL', {
+  style: 'currency',
+  currency: 'CLP',
+});
+const precio_format = formatter.format(Number(price));
+
 
 ---
 <div
@@ -90,8 +96,8 @@ const { id, name, brand, price, image } = Astro.props;
     </div>
     <!-- Precio -->
     <div class="flex items-center justify-between">
-      <span class="text-xl font-bold text-gray-900 dark:text-white"
-        >${price} </span
+      <span class="text-xl font-semibold text-gray-900 dark:text-white"
+        >{precio_format} </span
       >
       <a
         href=`../carro/${id}`
