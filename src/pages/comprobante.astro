@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+
+
+const idurl = Astro.url.href.split("=")[1];
+
+const apiKeyId = "597055555532";
+const apiKeySecret =
+  "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C";
+
+const token = idurl
+const res = await fetch(
+  `https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions/${idurl}`,
+  {
+    method: "PUT",
+    headers: {
+      "Tbk-Api-Key-Id": apiKeyId,
+      "Tbk-Api-Key-Secret": apiKeySecret,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: token,
+    }),
+  }
+);
+
+const response = await res.json();
+
+
+console.log(response);
+
+const { buy_order, session_id, card_detail, accounting_date, transaction_date, details, status} = response;
+
+const estado_compra  = status === "AUTHORIZED" ? "Transacción autorizada" : "Transacción rechazada";
+---
+
+<Layout title="FerremaX | Comprobante de pago">
+  <main>
+    <Header />
+    <div class="flex flex-col justify-center items-center">
+      <h1 class="flex justify-center items-center text-3xl font-bold pt-40">Este es el comprobate de tu compra</h1>
+      <p>{buy_order}</p>
+      <p class:list={[
+        "text-2xl font-bold",
+        {
+          "text-green-500": estado_compra === "Transacción autorizada",
+          "text-red-500": estado_compra === "Transacción rechazada",
+        } 
+      ]}>{estado_compra}</p>
+    </div>
+  </main>
+
+</Layout>
