@@ -7,7 +7,34 @@ const idurl = Astro.url.href.split("/")[4];
 const productos = await db.select().from(Productos);
 const producto = productos.find((producto) => producto.id === Number(idurl));
 
+const apiKeyId = "597055555532";
+const apiKeySecret =
+  "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C";
+const res = await fetch(
+  "https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions",
+  {
+    method: "POST",
+    headers: {
+      "Tbk-Api-Key-Id": apiKeyId,
+      "Tbk-Api-Key-Secret": apiKeySecret,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      buy_order: 123456789,
+      session_id: "session123455754",
+      amount: producto?.price,
+      return_url: "http://localhost:4321/comprobante",
+    }),
+  }
+);
 
+const { token, url } = await res.json();
+
+const formatter = new Intl.NumberFormat('es-CL', {
+  style: 'currency',
+  currency: 'CLP',
+});
+const precio_format = formatter.format(Number(producto?.price));
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -43,12 +70,21 @@ const producto = productos.find((producto) => producto.id === Number(idurl));
           <p class="text-lg font-normal">Garantía: {producto?.warranty}</p>
         </div>
         <p class="text-lg font-medium">
-          Precio: ${producto?.price} + IVA incluido
+          Precio: {precio_format} + IVA incluido
         </p>
-        <a href=`../carro/${producto?.id}`
-          class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-60 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
-          >Comprar</a
-        >
+
+        <div class="flex flex-row gap-3">
+          <a
+            href={url + "?token_ws=" + token}
+            class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
+            >Comprar</a
+          >
+          <a
+            href=`../carro/${producto?.id}`
+            class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
+            >Añadir al carro</a
+          >
+        </div>
       </div>
     </div>
   </main>
