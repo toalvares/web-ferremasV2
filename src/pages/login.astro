@@ -1,5 +1,36 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { db, Usuarios, eq } from "astro:db";
+
+interface Props {
+  error: string;
+}
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const email = formData.get('email');
+  const password = formData.get('password');
+
+  if (typeof email === 'string' && typeof password === 'string') {
+    const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
+    if (email === usuario[0].email && password === usuario[0].password) {
+      const user = usuario[0].name;
+
+      if (user === 'admin') {
+        console.log('Usuario administrador')
+        return Astro.redirect('/pedidos')
+      }else{
+        return Astro.redirect('/')
+      }
+    } else {
+      console.log(usuario)
+      console.log('Usuario o contraseña incorrectos')
+      const error = 'Usuario o contraseña incorrectos'
+    }
+  }
+}
+
+const { error } = Astro.props;
 
 ---
 
@@ -15,22 +46,25 @@ import Layout from "../layouts/Layout.astro";
                     <h1 class="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Inicia sesión con tu cuenta
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="post">
+                    <form class="space-y-4 md:space-y-6" method="POST">
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tu correo</label>
-                            <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="" required>
+                            <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="" required >
                         </div>
                         <div>
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
-                            <input type="password" name="password" id="password" placeholder="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
+                            <input type="password" name="password" id="password" placeholder="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required >
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                  <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300" required>
+                                  <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300">
                                 </div>
                                 <div class="ml-3 text-sm">
                                   <label for="remember" class="text-gray-500 dark:text-gray-300">Recuérdame</label>
+                                </div>
+                                <div class="ml-3 text-sm">
+                                  <span>{error}</span>
                                 </div>
                             </div>
                             <a href="../../404" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">¿Olvidaste tu contraseña?</a>

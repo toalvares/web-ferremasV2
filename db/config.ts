@@ -16,14 +16,22 @@ const Productos = defineTable({
 
 const Usuarios = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.number({ primaryKey: true, optional: false, unique: true}),
+    email: column.text({ unique: true, optional: false}),
     name: column.text(),
-    email: column.text(),
     password: column.text(),
+  },
+});
+
+const Session = defineTable({
+  columns: {
+    id: column.number({ optional: false, unique: true}),
+    userId: column.number({optional: false, references: () => Usuarios.columns.id}),
+    expiresAt: column.number({optional: false}),
   },
 });
 
 
 export default defineDb({
-  tables: { Productos, Usuarios },
+  tables: { Productos, Usuarios, Session },
 });
