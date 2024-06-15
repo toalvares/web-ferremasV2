@@ -1,22 +1,22 @@
 ---
 import Search from "../icons/Search.astro";
 import Cart from "../icons/Cart.astro";
-import CartFlyoutToggle from "./CartFlyoutToggle";
+// import CartFlyoutToggle from '../components/CartFlyoutToggle';
 
-const DateFormat = "YYYY-MM-DD"
+const DateFormat = "YYYY-MM-DD";
 
 let dateTime = new Date();
 let date = dateTime.toISOString().slice(0, 10);
 
-const apiBanco = await fetch(`https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=to.alvares@duocuc.cl&pass=Ugalde0237&function=GetSeries&timeseries=F022.TPM.TIN.D001.NO.Z.D&firstdate=2021-10-10&lastdate=${date}`)
+const apiBanco = await fetch(
+  `https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=to.alvares@duocuc.cl&pass=Ugalde0237&function=GetSeries&timeseries=F022.TPM.TIN.D001.NO.Z.D&firstdate=2021-10-10&lastdate=${date}`
+);
 
-const data = await apiBanco.json()
+const data = await apiBanco.json();
 
 // console.log(data)
 
-let id = 1
-
-
+let id = 1;
 ---
 
 <header>
@@ -25,8 +25,8 @@ let id = 1
     md:flex-row md:justify-evenly md:gap-16 md:px-16 md:py-7
   bg-[#232F3E] text-white">
     <a href="../">
-      <img src="../FerreMaxicon.png" alt="" class="md:w-96"/>
-      </a>
+      <img src="../FerreMaxicon.png" alt="" class="md:w-96" />
+    </a>
     <div class="flex items-center">
       <!-- Buscador -->
       <form class="w-[600px]">
@@ -57,54 +57,99 @@ let id = 1
       <a href="../registro">Registrarse</a>
     </div>
     <!-- Carrito -->
-    <a href=`../carro/${id}`>
-      <div class="relative py-2">
+    <!-- <CartFlyoutToggle client:load /> -->
+
+    <div class="contenedor">
+      <div  class="carticon relative py-2">
         <div class="t-0 absolute left-3">
-          <p
+          <span
             class="flex size-4 items-center justify-center rounded-full bg-orange-500 p-3 text-md text-white">
-            3
-          </p>
+            0
+          </span>
         </div>
-        <Cart />
+        <Cart id="carticon" />
       </div>
-    </a>
-  </nav>
-  <!-- Menu -->
-  <nav class="flex flex-row justify-center items-center">
-    <ul class="flex flex-row justify-center items-center px-16 py-7 gap-32">
-      <li>
-        <a href="../" class="text-lg font-semibold hover:text-orange-500"
-          >Inicio</a
-        >
-      </li>
-      <li>
-        <a
-          href="../productos"
-          class="text-lg font-semibold hover:text-orange-500">Productos</a
-        >
-      </li>
-      <li>
-        <a href="../sobrenosotros" class="text-lg font-semibold hover:text-orange-500"
-          >Sobre nosotros</a
-        >
-      </li>
-      <li>
-        <a
-          href="../contacto"
-          class="text-lg font-semibold hover:text-orange-500">Contacto</a
-        >
-      </li>
-    </ul>
-    <!-- Divisas -->
-    <div class="absolute right-16">
-      <select
-        name="currency"
-        id="currency"
-        class="collapse xl:visible text-sm border text-black border-gray-300 rounded-lg focus:ring-2 bg-gray-50 focus:ring-orange-400 focus:border-orange-400 focus:outline-none">
-        <option value="clp">CLP</option>
-        <option value="usd">USD</option>
-      </select>
     </div>
+
+    <div class="container-cart-products hidden">
+      <div class="row-product">
+        <div class="cart-product">
+          <div class="info-cart-product">
+            <span class="cantidad-producto-carrito">1</span>
+            <p class="titulo-producto-carrito">Zapatos Nike</p>
+            <span class="precio-producto-carrito">$80</span>
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="icon-close">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cart-total">
+        <h3>Total:</h3>
+        <span class="total-pagar">$200</span>
+      </div>
+      <p class="cart-empty">El carrito está vacío</p>
+    </div>
+
+
+
   </nav>
-  <hr class="border-t-2 border-gray-300"/>
 </header>
+<!-- Menu -->
+<nav class="flex flex-row justify-center items-center">
+  <ul class="flex flex-row justify-center items-center px-16 py-7 gap-32">
+    <li>
+      <a href="../" class="text-lg font-semibold hover:text-orange-500"
+        >Inicio</a
+      >
+    </li>
+    <li>
+      <a href="../productos" class="text-lg font-semibold hover:text-orange-500"
+        >Productos</a
+      >
+    </li>
+    <li>
+      <a
+        href="../sobrenosotros"
+        class="text-lg font-semibold hover:text-orange-500">Sobre nosotros</a
+      >
+    </li>
+    <li>
+      <a href="../contacto" class="text-lg font-semibold hover:text-orange-500"
+        >Contacto</a
+      >
+    </li>
+  </ul>
+  <!-- Divisas -->
+  <div class="absolute right-16">
+    <select
+      name="currency"
+      id="currency"
+      class="collapse xl:visible text-sm border text-black border-gray-300 rounded-lg focus:ring-2 bg-gray-50 focus:ring-orange-400 focus:border-orange-400 focus:outline-none">
+      <option value="clp">CLP</option>
+      <option value="usd">USD</option>
+    </select>
+  </div>
+</nav>
+<hr class="border-t-2 border-gray-300" />
+
+<script>
+  const btnCart = document.querySelector("div.carticon");
+  const contenedor = document.querySelector("container-cart-products");
+
+  btnCart?.addEventListener("click", () => {
+    console.log("click")
+    contenedor?.classList.toggle("hidden");
+  });
+
+</script>

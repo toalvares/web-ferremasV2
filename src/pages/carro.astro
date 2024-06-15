@@ -1,13 +1,15 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
-import Cartempty from "../../icons/Cartempty.astro";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
 import { db, Productos } from "astro:db";
+
 
 const idurl = Astro.url.href.split("/")[4];
 const productos = await db.select().from(Productos);
 const producto = productos.find((producto) => producto.id === Number(idurl));
 
+
+const { id, name, price, image, quantity } = Astro.props;
 
 const apiKeyId = "597055555532";
 const apiKeySecret =
@@ -24,7 +26,7 @@ const res = await fetch(
     body: JSON.stringify({
       buy_order: 123456789,
       session_id: "session123455754",
-      amount: producto?.price,
+      amount: 100000,
       return_url: "http://localhost:4321/comprobante",
     }),
   }
@@ -32,13 +34,11 @@ const res = await fetch(
 
 const { token, url } = await res.json();
 
-
-const formatter = new Intl.NumberFormat('es-CL', {
-  style: 'currency',
-  currency: 'CLP',
+const formatter = new Intl.NumberFormat("es-CL", {
+  style: "currency",
+  currency: "CLP",
 });
-const precio_format = formatter.format(Number(producto?.price));
-
+const precio_format = formatter.format(Number());
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -71,11 +71,11 @@ const precio_format = formatter.format(Number(producto?.price));
           class="flex items-center justify-between w-full border-b border-gray-200 py-2">
           <div class="flex items-center">
             <img
-              src={producto?.image}
+              src={image}
               class="w-16 h-16 object-cover rounded-lg"
               alt="Producto 1"
             />
-            <p class="text-lg text-gray-800 ml-4">{producto?.name.slice(0,9)}</p>
+            <p class="text-lg text-gray-800 ml-4">{name}</p>
           </div>
           <p class="text-lg text-gray-800">{precio_format}</p>
           <p class="text-lg text-gray-800">1</p>
@@ -118,12 +118,15 @@ const precio_format = formatter.format(Number(producto?.price));
           <p class="text-lg text-gray-800 font-bold">{precio_format}</p>
         </div>
 
-        <div
-          class="flex items-center justify-between w-full mt-6">
+        <div class="flex items-center justify-between w-full mt-6">
           <a href="/productos" class="text-orange-500 underline"
-            >Seguir comprando</a>
-          <a href={url + "?token_ws=" + token} class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg">Pagar</a>
-
+            >Seguir comprando</a
+          >
+          <a
+            href={url + "?token_ws=" + token}
+            class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg"
+            >Pagar</a
+          >
         </div>
       </div>
     </section>

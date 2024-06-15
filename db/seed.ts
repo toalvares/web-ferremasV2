@@ -44,7 +44,7 @@ export default async function seed() {
       model: "Nose",
       amperaje: "120V",
       warranty: "1 año",
-      image: "/productos/fresadora.jpg",
+      image: "/productos/kit.jpg",
     },
     {
       id: 5,

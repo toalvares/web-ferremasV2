@@ -1,9 +1,12 @@
 ---
+// import CartFlyout from '../components/CartFlyout';
+
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+import Header from "../components/Header.astro";
 ---
 
 <!doctype html>
@@ -12,25 +15,25 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body class="overflow-x-hidden">
+    <!-- <CartFlyout client:load /> -->
+    <Header />
     <slot />
     <script src="../../node_modules/flowbite/dist/flowbite.min.js"></script>
   </body>
-
 </html>
 <style is:global>
-  html{
+  html {
     /* Resetear estilos globales */
     margin: 0%;
     padding: 0%;
     width: 100vw;
     @media screen and (max-width: 768px) {
       width: 100vh;
-      
     }
   }
 </style>
