@@ -1,4 +1,5 @@
 ---
+import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
 import { db, Usuarios, eq } from "astro:db";
 
@@ -32,7 +33,6 @@ if (Astro.request.method === 'POST') {
 
 const { error } = Astro.props;
 ---
-
 <Layout title="FerremaX | Las mejores herramientas del mercado">
   <main>
     <section class="bg-gray-50 dark:bg-gray-900 h-screen">
