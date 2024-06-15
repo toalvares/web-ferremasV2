@@ -1,6 +1,10 @@
 ---
+import { type CartItemDisplayInfo } from "../cartStore";
+
+// import AddToCartForm from "./AddToCartForm";
+
 export interface DatosProducto {
-  id : number;
+  id: number;
   name: string;
   brand: string;
   price: string;
@@ -9,14 +13,20 @@ export interface DatosProducto {
 
 const { id, name, brand, price, image } = Astro.props;
 
-const formatter = new Intl.NumberFormat('es-CL', {
-  style: 'currency',
-  currency: 'CLP',
+const formatter = new Intl.NumberFormat("es-CL", {
+  style: "currency",
+  currency: "CLP",
 });
 const precio_format = formatter.format(Number(price));
 
-
+const item: CartItemDisplayInfo = {
+  id: id,
+  name: name,
+  image: image,
+  price: Number(price),
+};
 ---
+
 <div
   class="w-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-xl hover:border-gray-400 hover:transition-all hover:translate-y-1 duration-150 ease-in-out">
   <a href=`../detalle/${id}`>
@@ -97,13 +107,18 @@ const precio_format = formatter.format(Number(price));
     <!-- Precio -->
     <div class="flex items-center justify-between">
       <span class="text-xl font-semibold text-gray-900 dark:text-white"
-        >{precio_format} </span
-      >
-      <a
-        href=`../carro/${id}`
+        >{precio_format}
+      </span>
+      <button
+        id="button"
         class="text-white font-semibold bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 rounded-lg text-sm px-3 py-2.5 text-center transition-colors duration-200 ease-in-out"
-        >Añadir al carro</a
-      >
+        >Añadir al carro</button>
+      <!-- <AddToCartForm item={item} client:load>
+        <button
+          type="submit"
+          class="text-white font-semibold bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 rounded-lg text-sm px-3 py-2.5 text-center transition-colors duration-200 ease-in-out"
+          >Añadir al carro</button>
+      </AddToCartForm> -->
     </div>
   </div>
 </div>
