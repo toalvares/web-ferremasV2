@@ -19,7 +19,7 @@ const Usuarios = defineTable({
     id: column.number({ primaryKey: true, optional: false, unique: true}),
     email: column.text({ unique: true, optional: false}),
     name: column.text(),
-    password: column.text(),
+    password_hash: column.text(),
   },
 });
 

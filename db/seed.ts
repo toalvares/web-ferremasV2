@@ -5,7 +5,7 @@ export default async function seed() {
     {
       id: 1,
       name: "SOLDADORA INVERTER DW120 BLACK KRAFTER 120A LHE",
-      price: 12000,
+      price: 120000,
       brand: "Krafter",
       description: "Soldadora nazi",
       model: "DW120",
@@ -64,13 +64,13 @@ export default async function seed() {
       id: 1,
       name: "admin",
       email: "tomasalvares0237@gmail.com",
-      password: "admin",
+      password_hash: "admin",
     },
     {
       id: 2,
       name: "Usuario",
       email: "tomasalvares0237@hotmail.com",
-      password: "usuario",
+      password_hash: "usuario",
     },
   ]);
 }

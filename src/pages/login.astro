@@ -13,7 +13,7 @@ if (Astro.request.method === 'POST') {
 
   if (typeof email === 'string' && typeof password === 'string') {
     const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
-    if (email === usuario[0].email && password === usuario[0].password) {
+    if (email === usuario[0].email && password === usuario[0].password_hash) {
       const user = usuario[0].name;
 
       if (user === 'admin') {
@@ -31,7 +31,6 @@ if (Astro.request.method === 'POST') {
 }
 
 const { error } = Astro.props;
-
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
@@ -79,5 +78,4 @@ const { error } = Astro.props;
         </div>
       </section>
   </main>
-
 </Layout>
