@@ -20,7 +20,7 @@ const Usuarios = defineTable({
     email: column.text({ unique: true, optional: false}),
     name: column.text(),
     password_hash: column.text(),
-  },
+  }
 });
 
 const Session = defineTable({

@@ -1,5 +1,4 @@
 ---
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
 import { db, Usuarios, eq } from "astro:db";
 
@@ -16,7 +15,6 @@ if (Astro.request.method === 'POST') {
     const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
     if (email === usuario[0].email && password === usuario[0].password_hash) {
       const user = usuario[0].name;
-
       if (user === 'admin') {
         console.log('Usuario administrador')
         return Astro.redirect('/pedidos')
