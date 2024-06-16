@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { db, Usuarios } from "astro:db";
+import { db, Usuarios, eq } from "astro:db";
 
 
 
@@ -11,34 +11,22 @@ if (Astro.request.method === "POST"){
     const password = formData.get("password");
     
     if (typeof name === 'string' && typeof email === 'string' && typeof password === 'string') {
-        const correos = await db.select({correo: Usuarios.email}).from(Usuarios);
-        const correos_array = correos.map(correo => correo.correo);
-        
-        if (correos_array.includes(email)){
+        // const correos = await db.select({correo: Usuarios.email}).from(Usuarios);
+        // const correos_array = correos.map(correo => correo.correo);
+        const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
+        console.log(usuario);
+        if (usuario.length > 0 && usuario[0].email === email){
             console.log("Correo ya registrado");
         } else {
             console.log("Usuario registrado");
             await db.insert(Usuarios).values({name: name, email: email, password_hash: password })
-            Astro.redirect("/login");
+            return Astro.redirect("/login");
         }
     }
 }else{
     Astro.redirect("../");
 }
-// if (Astro.request.method === "POST"){
-//     const formData = await Astro.request.formData();
-//     const name = formData.get('name');
-//     const email = formData.get("email");
-//     const password = formData.get("password");
-//     if (typeof name === 'string' && typeof email === 'string' && typeof password === 'string') {
-//         await db.insert(Usuarios).values({name: name, email: email, password_hash: password })
-//         console.log("Usuario registrado");
-//     }else{
-//         console.log("Error al registrar usuario");
-//         //Mostrar error
-//         console.log(name, email, password);
-//     }
-// }
+
 
 ---
 
