@@ -57,6 +57,17 @@ export default async function seed() {
       warranty: "1 año",
       image: "/productos/cepilladora.jpg",
     },
+    {
+      id: 6,
+      name: "CEPILLO CANTEADOR EINHELL TC-SP 204 1.500 W 900 RPM",
+      price: 100000,
+      brand: "EINHELL",
+      description: "Soldadora nazi",
+      model: "Nose",
+      amperaje: "120V",
+      warranty: "1 año",
+      image: "/productos/cepilladora.jpg",
+    },
   ]);
 
   await db.insert(Usuarios).values([

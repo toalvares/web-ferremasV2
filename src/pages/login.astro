@@ -6,13 +6,16 @@ interface Props {
   error: string;
 }
 
-if (Astro.request.method === 'POST') {
+try {
+  if (Astro.request.method === 'POST') {
   const formData = await Astro.request.formData();
   const email = formData.get('email');
   const password = formData.get('password');
-
+  
   if (typeof email === 'string' && typeof password === 'string') {
-    const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
+    
+    const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));
+
     if (email === usuario[0].email && password === usuario[0].password_hash) {
       const user = usuario[0].name;
       if (user === 'admin') {
@@ -28,6 +31,12 @@ if (Astro.request.method === 'POST') {
     }
   }
 }
+  
+} catch (error) {
+  
+}
+
+
 
 const { error } = Astro.props;
 ---

@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { db, Usuarios, eq } from "astro:db";
 
-
-
-if (Astro.request.method === "POST"){
+try {
+    if (Astro.request.method === "POST"){
     const formData = await Astro.request.formData();
     const name = formData.get('name');
     const email = formData.get("email");
@@ -23,9 +22,15 @@ if (Astro.request.method === "POST"){
             return Astro.redirect("/login");
         }
     }
-}else{
-    Astro.redirect("../");
+    }else{
+        Astro.redirect("../");
+    }
+
+    
+} catch (error) {
+    console.log(error)
 }
+
 
 
 ---
