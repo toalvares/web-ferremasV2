@@ -4,16 +4,22 @@ import { db, Productos } from "astro:db";
 
 async function fetchProductos() {
   try {
+    if (db === undefined) {
+      throw new Error("La conexión a la base de datos no está definida");
+    }
+
     const productos = await db.select().from(Productos);
+    if (productos.length === 0) {
+      throw new Error("No existen productos en la base de datos");
+    }
     return productos;
   } catch (error) {
-    console.error("Error al obtener los productos:", error);
+    console.error(error);
     return [];
   }
 }
 
 const productos = await fetchProductos();
-
 const mensaje = "No hay productos disponibles para mostrar";
 
 ---
@@ -33,7 +39,7 @@ const mensaje = "No hay productos disponibles para mostrar";
         />
       ))
     ) : (
-      <p>{mensaje}</p>
+      <p class="text-4xl font-semibold">{mensaje}</p>
     )}
   </div>
 </section>
