@@ -2,9 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { db, Usuarios, eq } from "astro:db";
 
-interface Props {
-  error: string;
-}
+let mensaje = ''
 
 try {
   if (Astro.request.method === 'POST') {
@@ -13,27 +11,30 @@ try {
   const password = formData.get('password');
   
   if (typeof email === 'string' && typeof password === 'string') {
-    
     const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));
+    
+    if (email !== usuario[0].email){
+      mensaje = 'El correo no se encuentra registrado en la página'
+    }
+
+    if (email === usuario[0].email && password !== usuario[0].password_hash){
+    mensaje = 'El correo o contraseña son incorrectos'
+    }
 
     if (email === usuario[0].email && password === usuario[0].password_hash) {
       const user = usuario[0].name;
+      const session = Astro.cookies.set('usuario', JSON.stringify({ name: usuario[0].name, email: usuario[0].email }), { httpOnly: false });
+      console.log(session)
       if (user === 'admin') {
-        console.log('Usuario administrador')
         return Astro.redirect('/pedidos')
       }else{
         return Astro.redirect('/')
       }
-    } else {
-      console.log(usuario)
-      console.log('Usuario o contraseña incorrectos')
-      const error = 'Usuario o contraseña incorrectos'
     }
   }
 }
-  
-} catch (error) {
-
+  } catch (error) {
+    console.log(error);
 }
 
 
@@ -61,6 +62,9 @@ const { error } = Astro.props;
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
                             <input type="password" name="password" id="password" placeholder="" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required >
                         </div>
+                        <div class="">
+                          <span class="text-sm font-semibold text-red-500">{mensaje}</span>
+                        </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
@@ -68,9 +72,6 @@ const { error } = Astro.props;
                                 </div>
                                 <div class="ml-3 text-sm">
                                   <label for="remember" class="text-gray-500 dark:text-gray-300">Recuérdame</label>
-                                </div>
-                                <div class="ml-3 text-sm">
-                                  <span>{error}</span>
                                 </div>
                             </div>
                             <a href="../../404" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">¿Olvidaste tu contraseña?</a>
