@@ -1,22 +1,8 @@
 ---
 import Search from "../icons/Search.astro";
 import Cart from "../icons/Cart.astro";
-// import CartFlyoutToggle from '../components/CartFlyoutToggle';
 
-const DateFormat = "YYYY-MM-DD";
 
-let dateTime = new Date();
-let date = dateTime.toISOString().slice(0, 10);
-
-const apiBanco = await fetch(
-  `https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user=to.alvares@duocuc.cl&pass=Ugalde0237&function=GetSeries&timeseries=F022.TPM.TIN.D001.NO.Z.D&firstdate=2021-10-10&lastdate=${date}`
-);
-
-const data = await apiBanco.json();
-
-// console.log(data)
-
-let id = 1;
 ---
 
 <header>
