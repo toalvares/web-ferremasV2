@@ -1,0 +1,14 @@
+Al descargar o clonar el proyecto estos son los 
+comandos necesarios
+
+1. Instalar dependencias:
+npm install
+
+2. Correr proyecto en modo desarrollador:
+npm run dev
+
+3. Compilar proyecto:
+npm run build
+
+4. Ver base de dato:
+npx astro db (comando)
