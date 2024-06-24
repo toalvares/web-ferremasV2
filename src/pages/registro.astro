@@ -3,41 +3,34 @@ import Layout from "../layouts/Layout.astro";
 import { db, Usuarios, eq } from "astro:db";
 
 function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+let mensaje = "";
 
 try {
-    if (Astro.request.method === "POST"){
-    const formData = await Astro.request.formData();
-    const name = formData.get('name');
-    const email = formData.get("email");
-    const password = formData.get("password");
-    
-    if (typeof name === 'string' && typeof email === 'string' && typeof password === 'string') {
-        // const correos = await db.select({correo: Usuarios.email}).from(Usuarios);
-        // const correos_array = correos.map(correo => correo.correo);
-        const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
-        console.log(usuario);
-        if (usuario.length > 0 && usuario[0].email === email){
-            const mensaje = 'Correo ya registrado'
-            await delay(1000);
-            console.log("Correo ya registrado");
-        } else {
-            console.log("Usuario registrado");
-            await db.insert(Usuarios).values({name: name, email: email, password_hash: password })
-            return Astro.redirect("/login");
+    if (Astro.request.method === "POST") {
+        const formData = await Astro.request.formData();
+        const name = formData.get('name');
+        const email = formData.get("email");
+        const password = formData.get("password");
+
+        if (typeof name === 'string' && typeof email === 'string' && typeof password === 'string') {
+            const usuario = await db.select().from(Usuarios).where(eq(Usuarios.email, email));  
+        
+            if (email.length > 0 && usuario.length > 0 && usuario[0].email === email) {
+                mensaje = 'Correo ya registrado';
+            } else {
+                await db.insert(Usuarios).values({ name: name, email: email, password_hash: password });
+                return Astro.redirect("/login");
+            }
         }
     }
-    }else{
-        Astro.redirect("../");
-    }
-
-    
 } catch (error) {
-    console.log(error)
+    console.log(error);
 }
 
-const { mensaje } = Astro.props 
+const props = { mensaje };
 
 ---
 
@@ -51,7 +44,7 @@ const { mensaje } = Astro.props
             <div class="w-full bg-gray-100 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Registrate con nosotros 
+                        Regístrate con nosotros 
                     </h1>
                     <form class="space-y-4 md:space-y-6" method="POST">
                         <div>
@@ -63,11 +56,11 @@ const { mensaje } = Astro.props
                             <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" placeholder="name@company.com" required>
                         </div>
                         <div>
-                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
                             <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required>
                         </div>
                         <div>
-                            <span class="text-sm font-semibold ">{mensaje}</span>
+                            <span class="text-sm font-semibold text-red-500">{mensaje}</span>
                         </div>
                         <button type="submit" class="w-full font-semibold text-white bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Registrar cuenta</button>
                         <p class="font-light text-gray-500">
@@ -77,6 +70,6 @@ const { mensaje } = Astro.props
                 </div>
             </div>
         </div>
-      </section>
+    </section>
   </main>
 </Layout>
