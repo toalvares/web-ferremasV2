@@ -1,14 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-
 const idurl = Astro.url.href.split("=")[1];
 
 const apiKeyId = "597055555532";
 const apiKeySecret =
   "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C";
 
-const token = idurl
+const token = idurl;
 const res = await fetch(
   `https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions/${idurl}`,
   {
@@ -26,28 +25,80 @@ const res = await fetch(
 
 const response = await res.json();
 
+const formatter = new Intl.NumberFormat("es-CL", {
+  style: "currency",
+  currency: "CLP",
+});
 
-console.log(response);
+const formatterDate = new Intl.DateTimeFormat("es-CL", {
+  dateStyle: "long",
+});
 
-const { buy_order, am, card_detail, accounting_date, transaction_date, details, status, amount} = response;
+// console.log(response);
 
-const estado_compra  = status === "AUTHORIZED" ? "Transacción autorizada" : "Transacción rechazada";
+const {
+  buy_order,
+  card_detail,
+  transaction_date,
+  status,
+  amount,
+} = response;
+
+const precio_format = formatter.format(Number(amount));
+const fecha_compra = formatterDate.format(new Date(transaction_date));
+// const 
+const estado_compra =
+  status === "AUTHORIZED" ? "Transacción autorizada" : "Transacción rechazada";
 ---
 
 <Layout title="FerremaX | Comprobante de pago">
   <main>
-    <div class="flex flex-col justify-center items-center">
-      <h1 class="flex justify-center items-center text-3xl font-bold pt-40">Este es el comprobate de tu compra</h1>
-      <p>{buy_order}</p>
-      <p>{amount}</p>
-      <p class:list={[
-        "text-2xl font-bold",
-        {
-          "text-green-500": estado_compra === "Transacción autorizada",
-          "text-red-500": estado_compra === "Transacción rechazada",
-        } 
-      ]}>{estado_compra}</p>
+    <!-- Tabla para mostrar el comprobante de compra -->
+    <div class="container mx-auto py-12 mt-16">
+      <h1 class="text-4xl text-center font-bold text-gray-800">
+        Comprobante de compra
+      </h1>
+      <table class="table-auto w-full mt-6">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 text-center">Fecha de transacción</th>
+            <th class="px-4 py-2 text-center">Tarjeta utlizada</th>
+            <th class="px-4 py-2 text-center">Número de orden</th>
+            <th class="px-4 py-2 text-center">Estado de la transacción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-4 py-2 text-center">{fecha_compra}</td>
+            <td class="border px-4 py-2 text-center">{card_detail.card_number}</td>
+            <td class="border px-4 py-2 text-center">{buy_order}</td>
+            <td
+              class:list={[
+                "border px-4 py-2 font-bold",
+                {
+                  "text-green-500": estado_compra === "Transacción autorizada",
+                  "text-red-500": estado_compra === "Transacción rechazada",
+                },
+              ]}>{estado_compra}</td
+            >
+          </tr>
+        </tbody>
+      </table>
+      <h2 class="text-2xl font-bold mt-16 text-center">Detalle de la compra</h2>
+      <table class="table-auto w-full mt-2">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Producto</th>
+            <th class="px-4 py-2">Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-4 py-2 text-center">1</td>
+            <td class="border px-4 py-2 text-center">{precio_format}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </main>
-
-</Layout>
+  </Layout>

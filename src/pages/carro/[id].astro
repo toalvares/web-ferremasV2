@@ -24,6 +24,7 @@ const res = await fetch(
       buy_order: 123456789,
       session_id: "session123455754",
       amount: producto?.price,
+      // return_url: "http://localhost:4321/comprobante",
       return_url: "https://ferremas.netlify.app/comprobante",
     }),
   }
@@ -49,12 +50,6 @@ const precio_format = formatter.format(Number(producto?.price));
         Carrito de compras
       </h1>
 
-      <!-- Si el carro está vacío -->
-      <!-- <div class="flex flex-col items-center mt-6" hidden>
-        <Cartempty />
-        <p class="text-xl text-gray-800 mt-4">Tu carro de compras está vacío</p>
-        <a href="../productos" class="text-orange-500 underline mt-2">Ir a productos</a>
-      </div> -->
 
       <!-- Si el carro no está vacío -->
       <div class="flex flex-col items-center mt-6" hidden>
