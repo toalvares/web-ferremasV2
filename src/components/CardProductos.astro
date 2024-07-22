@@ -1,7 +1,41 @@
 ---
 import { type CartItemDisplayInfo } from "../cartStore";
+import { db, Productos } from "astro:db";
 
-// import AddToCartForm from "./AddToCartForm";
+//try catch para que no se caiga la página si no hay productos
+async function fetchProductos() {
+  try {
+    if (db === undefined) {
+      throw new Error("La conexión a la base de datos no está definida");
+    }
+
+    const productos = await db.select().from(Productos);
+    if (productos.length === 0) {
+      throw new Error("No existen productos en la base de datos");
+    }
+    return productos;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+const idurl = Astro.url.href.split("/")[4];
+
+let productos = [];
+let producto = null;
+let errorMessage: string = "";
+
+try {
+  productos = await fetchProductos();
+  producto = productos.find((producto) => producto.id === Number(idurl));
+  if (!producto) {
+    throw new Error("Producto no encontrado");
+  }
+} catch (error: any) {
+  errorMessage = "Ha ocurrido un error, no se encuentran productos, ";
+}
+
 
 export interface DatosProducto {
   id: number;
@@ -19,16 +53,10 @@ const formatter = new Intl.NumberFormat("es-CL", {
 });
 const precio_format = formatter.format(Number(price));
 
-const item: CartItemDisplayInfo = {
-  id: id,
-  name: name,
-  image: image,
-  price: Number(price),
-};
 ---
 
 <div
-  class="w-80 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-xl hover:border-gray-400 hover:transition-all hover:translate-y-1 duration-150 ease-in-out">
+  class="w-80 md:w-64 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-xl hover:border-gray-400 hover:transition-all hover:translate-y-1 duration-150 ease-in-out">
   <a href=`../detalle/${id}`>
     <img
       class="p-2 rounded-t-lg w-full h-80 object-cover object-center"
@@ -109,16 +137,11 @@ const item: CartItemDisplayInfo = {
       <span class="text-xl font-semibold text-gray-900 dark:text-white"
         >{precio_format}
       </span>
-      <button
+      <a href=`../carro/${id}`
         id="button"
         class="text-white font-semibold bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 rounded-lg text-sm px-3 py-2.5 text-center transition-colors duration-200 ease-in-out"
-        >Añadir al carro</button>
-      <!-- <AddToCartForm item={item} client:load>
-        <button
-          type="submit"
-          class="text-white font-semibold bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 rounded-lg text-sm px-3 py-2.5 text-center transition-colors duration-200 ease-in-out"
-          >Añadir al carro</button>
-      </AddToCartForm> -->
+        >Añadir al carro</a
+      >
     </div>
   </div>
 </div>
