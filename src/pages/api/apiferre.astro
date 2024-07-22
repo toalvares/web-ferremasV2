@@ -1,0 +1,35 @@
+---
+import { db, Productos } from "astro:db";
+import Layout from "../../layouts/Layout.astro";
+
+async function fetchProductos() {
+  try {
+    const productos = await db.select().from(Productos);
+    return productos;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+const productos = await fetchProductos();
+---
+
+<Layout title="Productos">
+  <main>
+    <h1 class="text-4xl font-bold text-center my-8">Productos</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {productos.length > 0 ? (
+        productos.map((producto) => (
+          <div class="p-4 border rounded shadow">
+            <h2 class="text-2xl font-semibold">{producto.name}</h2>
+            <p class="text-lg">{producto.brand}</p>
+            <p class="text-lg">Precio: ${producto.price}</p>
+          </div>
+        ))
+      ) : (
+        <p>No hay productos disponibles</p>
+      )}
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import { db, Productos } from "astro:db";
+
+async function fetchProductos() {
+  try {
+    const productos = await db.select().from(Productos);
+    return productos;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+const productos = await fetchProductos();
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos API</title>
+</head>
+<body>
+  <pre>
+    {JSON.stringify(productos, null, 2)}
+  </pre>
+</body>
+</html>

@@ -74,9 +74,9 @@ const precio_format = formatter.format(Number(producto?.price));
           <p class="text-2xl text-pretty font-bold">{errorMessage}</p>
         </div>
       ) : (
-        <div class="w-screen md:grid md:grid-cols-2 flex flex-col md:gap-96 xl:gap-32 2xl:gap-40 mx-auto h-screen">
+        <div class="w-screen md:grid md:grid-cols-2 flex flex-col md:gap-96 lg:gap-96 xl:gap-56 2xl:gap-40 mx-auto h-screen">
           <div class="xl:ml-56 md:ml-32 ml-14 pt-24">
-            <div class="min-w-[480px] 2xl:w-[620px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
+            <div class="min-w-[480px] 2xl:w-[520px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
               <img
                 src={`${producto?.image}`}
                 class="object-contain"
@@ -110,7 +110,7 @@ const precio_format = formatter.format(Number(producto?.price));
               </a>
               <a
                 href={`../carro/${producto?.id}`}
-                class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out">
+                class="bg-orange-500 text-white text-center font-semibold lg:py-2 lg:px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out">
                 Añadir al carro
               </a>
             </div>
