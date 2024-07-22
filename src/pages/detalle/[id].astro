@@ -2,9 +2,39 @@
 import Layout from "../../layouts/Layout.astro";
 import { db, Productos } from "astro:db";
 
+//try catch para que no se caiga la página si no hay productos
+async function fetchProductos() {
+  try {
+    if (db === undefined) {
+      throw new Error("La conexión a la base de datos no está definida");
+    }
+
+    const productos = await db.select().from(Productos);
+    if (productos.length === 0) {
+      throw new Error("No existen productos en la base de datos");
+    }
+    return productos;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 const idurl = Astro.url.href.split("/")[4];
-const productos = await db.select().from(Productos);
-const producto = productos.find((producto) => producto.id === Number(idurl));
+
+let productos = [];
+let producto = null;
+let errorMessage: string = "";
+
+try {
+  productos = await fetchProductos();
+  producto = productos.find((producto) => producto.id === Number(idurl));
+  if (!producto) {
+    throw new Error("Producto no encontrado");
+  }
+} catch (error: any) {
+  errorMessage = "Ha ocurrido un error, no se encuentran productos, ";
+}
 
 const apiKeyId = "597055555532";
 const apiKeySecret =
@@ -22,7 +52,6 @@ const res = await fetch(
       buy_order: 123456789,
       session_id: "session123455754",
       amount: producto?.price,
-      // return_url: "http://localhost:4321/comprobante",
       return_url: "https://ferremas.netlify.app/comprobante",
     }),
   }
@@ -30,62 +59,64 @@ const res = await fetch(
 
 const { token, url } = await res.json();
 
-const formatter = new Intl.NumberFormat('es-CL', {
-  style: 'currency',
-  currency: 'CLP',
+const formatter = new Intl.NumberFormat("es-CL", {
+  style: "currency",
+  currency: "CLP",
 });
 const precio_format = formatter.format(Number(producto?.price));
 ---
 
 <Layout title="FerremaX | Las mejores herramientas del mercado">
   <main>
+    {
+      errorMessage ? (
+        <div class="flex justify-center pt-24">
+          <p class="text-2xl text-pretty font-bold">{errorMessage}</p>
+        </div>
+      ) : (
+        <div class="w-screen md:grid md:grid-cols-2 flex flex-col md:gap-96 xl:gap-32 2xl:gap-40 mx-auto h-screen">
+          <div class="xl:ml-56 md:ml-32 ml-14 pt-24">
+            <div class="min-w-[480px] 2xl:w-[620px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
+              <img
+                src={`${producto?.image}`}
+                class="object-contain"
+                alt="Imagen de tato"
+              />
+            </div>
+          </div>
 
-    <div
-      class="w-screen md:grid md:grid-cols-2 flex flex-col md:gap-96 xl:gap-32 2xl:gap-40 mx-auto h-screen">
-      <div class="xl:ml-56 md:ml-32 ml-14 pt-24">
-        <div
-          class="min-w-[480px] 2xl:w-[620px] border border-gray-200 rounded-lg shadow-2xl hover:shadow-orange-300 hover:shadow-2xl hover:border-none hover:transition-all hover:-translate-y-1 duration-150 ease-in-out">
-          <img
-            src=`${producto?.image}`
-            class="object-contain"
-            alt="Imagen de tato"
-          />
-        </div>
-      </div>
+          <div class="flex flex-col w-3/4 md:w-3/5 pt-24 text-pretty gap-y-3">
+            <div>
+              <h2 class="text-3xl font-semibold">{producto?.name}</h2>
+              <p class="text-sm font-medium">Marca: {producto?.brand}</p>
+            </div>
+            <div class="flex flex-col gap-y-2">
+              <p class="text-lg font-normal text-pretty">
+                {producto?.description || "Descripción del producto"}
+              </p>
+              <p class="text-lg font-normal">Modelo: {producto?.model}</p>
+              <p class="text-lg font-normal">Amperaje: {producto?.amperaje}</p>
+              <p class="text-lg font-normal">Garantía: {producto?.warranty}</p>
+            </div>
+            <p class="text-lg font-medium">
+              Precio: {precio_format} + IVA incluido
+            </p>
 
-      <div class="flex flex-col w-3/4 md:w-3/5 pt-24 text-pretty gap-y-3">
-        <div>
-          <h2 class="text-3xl font-semibold">
-            {producto?.name}
-          </h2>
-          <p class="text-sm font-medium">Marca: {producto?.brand}</p>
+            <div class="flex flex-row gap-3">
+              <a
+                href={url + "?token_ws=" + token}
+                class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out">
+                Comprar
+              </a>
+              <a
+                href={`../carro/${producto?.id}`}
+                class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out">
+                Añadir al carro
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="flex flex-col gap-y-2">
-          <p class="text-lg font-normal text-pretty">
-            {producto?.description || "Descripción del producto"}
-          </p>
-          <p class="text-lg font-normal">Modelo: {producto?.model}</p>
-          <p class="text-lg font-normal">Amperaje: {producto?.amperaje}</p>
-          <p class="text-lg font-normal">Garantía: {producto?.warranty}</p>
-        </div>
-        <p class="text-lg font-medium">
-          Precio: {precio_format} + IVA incluido
-        </p>
-
-        <div class="flex flex-row gap-3">
-          <a
-            href={url + "?token_ws=" + token}
-            class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
-            >Comprar</a
-          >
-          <a
-            href=`../carro/${producto?.id}`
-            class="bg-orange-500 text-white text-center font-semibold py-2 px-4 w-36 rounded-lg hover:bg-orange-600 hover:transition-all hover:-translate-y-0.5 duration-200 ease-in-out"
-            >Añadir al carro</a
-          >
-        </div>
-      </div>
-    </div>
+      )
+    }
   </main>
 </Layout>
-
